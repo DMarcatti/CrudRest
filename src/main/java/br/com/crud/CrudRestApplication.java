@@ -4,12 +4,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CrudAngularApplication {
+public class CrudRestApplication {
 
 
 	
 	public static void main(String[] args) {
-		SpringApplication.run(CrudAngularApplication.class, args);
+		SpringApplication.run(CrudRestApplication.class, args);
 	}
 }
 	

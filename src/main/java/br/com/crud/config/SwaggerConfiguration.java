@@ -18,27 +18,23 @@ public class SwaggerConfiguration {
 
 	@Bean
     public Docket api() {
-//        return new Docket(DocumentationType.SWAGGER_2).select().apis(
-//           RequestHandlerSelectors.any()).paths(PathSelectors.any()).build();
-        
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .paths(Predicates.not(PathSelectors.regex("/error"))) // Exclude Spring error controllers
+                .paths(Predicates.not(PathSelectors.regex("/error"))) // Excluinto controle de erros do Spring
                 .build();        
-        
-        
     }
 	
-    private ApiInfo apiInfo() {
+    @SuppressWarnings("deprecation")
+	private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Spring REST Sample with Swagger")
-                .description("Spring REST Sample with Swagger")
-                .termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
+                .title("SpringBoot REST: Exemplo com Swagger")
+                .description("Implementação de SpringBoot com exemplo REST  e Swagger")
+                .termsOfServiceUrl("")
                 .contact("Diego Marcatti")
                 .license("Apache License Version 2.0")
-                .licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
-                .version("2.0")
+                .licenseUrl("")
+                .version("1.0")
                 .build();
     }	
 	
