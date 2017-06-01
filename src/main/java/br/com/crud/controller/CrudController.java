@@ -1,24 +1,45 @@
 package br.com.crud.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.crud.error.CrudErrorType;
 import br.com.crud.model.Usuario;
 import br.com.crud.service.CrudService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+/**
+ * Exemplo Spring Boot, Rest, jdbcTemplate, PostGres 
+ * @author Diego Marcatti
+ * @version 1.0 - 30/05/17
+ * @since 30/05/17
+ */
+
 
 @RestController
 @Api(value = "Usuario")
@@ -29,34 +50,40 @@ public class CrudController {
 	
 
 	
-	@RequestMapping(value="/deletAll" , method=RequestMethod.DELETE)
-    public ResponseEntity delete() {
+    @ApiOperation(value = "deleteAll", notes = "Remove todos os usuarios cadastrados")
+    @RequestMapping(value="/deleteAll" , method=RequestMethod.DELETE)
+    public ResponseEntity<?> deleteAll() {
 		service.deleteAllUsuarios();
     	return new ResponseEntity(HttpStatus.OK);
     }	
-	
 
-    @RequestMapping(value="/delete/{id}" , method=RequestMethod.DELETE)
+    @ApiOperation(value = "deleteById", notes = "Remove usuario cadastrados por ID")
+    @RequestMapping(value="/delete/{id}" , method=RequestMethod.DELETE,
+    				produces = { MediaType.APPLICATION_JSON_VALUE} )
     public ResponseEntity deleteById(@PathVariable("id") long id) {
     	service.deleteUsuarioById(id);
     	return new ResponseEntity(HttpStatus.OK);
     }	
 	
-	
-	@RequestMapping(value="/salvar" , method=RequestMethod.POST)
-    public ResponseEntity<Usuario> gravar( @RequestBody Usuario usuario) {
-//    	if(service.isUsuarioExist(usuario)){
-//            return new ResponseEntity(new CrudErrorType("User with id " + usuario.getNome() 
-//                    + " not found"), HttpStatus.NO_CONTENT);
-//    		
-//    	}
+
+    @ApiOperation(value = "save", notes = "Grava o Usuario" , response = Usuario.class)
+    @RequestMapping(value="/save" , method=RequestMethod.POST,
+    				produces = { MediaType.APPLICATION_JSON_VALUE,
+    							 MediaType.APPLICATION_JSON_VALUE 
+    						   }
+    			   )
+    public ResponseEntity<Usuario> save( @RequestBody Usuario usuario) {
+    	if(service.isUsuarioExist(usuario)){
+            return new ResponseEntity(new CrudErrorType("User with id " + usuario.getNome() 
+                    + " not found"), HttpStatus.NO_CONTENT);
+    		
+    	}
     	service.saveUsuario(usuario);
     	return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
     }	
 
-    @ApiOperation(value = "findById", 
-            notes = "Retrieves a single customer", response = Usuario.class)
-    @RequestMapping(value="/pesquisa/{id}" , method=RequestMethod.GET,
+    @ApiOperation(value = "findById", notes = "Pesquisa usuario utilizando ID", response = Usuario.class)
+    @RequestMapping(value="/findbyid/{id}" , method=RequestMethod.GET,
             produces = { MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity findById(@Valid @PathVariable("id") long id) {
@@ -68,21 +95,102 @@ public class CrudController {
         return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
     }	
     
-    @RequestMapping(value="/listar" , method=RequestMethod.GET)
+    @RequestMapping(value="/findAll" , method=RequestMethod.GET)
     public ResponseEntity<List<Usuario>> findAll() {
     	return new ResponseEntity<List<Usuario>>(service.findAllUsuarios(), HttpStatus.OK);
     }	
 
-    @RequestMapping(value="/pesquisa_nome/{nome}" , method=RequestMethod.GET)
-    public ResponseEntity<List<Usuario>> findByNome(@PathVariable("nome") String nome) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value="/findbynome/{name}" , method=RequestMethod.GET)
+    public ResponseEntity<List<Usuario>> findByName(@PathVariable("nome") String nome) {
     	List<Usuario> usuarios = service.findByName(nome);
         if (usuarios == null) {
             return new ResponseEntity(new CrudErrorType("User(s) with nome " + nome
                     + " not found"), HttpStatus.NOT_FOUND);
         }    	
         return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
-    }	
+    }
+    
+    
+    
+    @ApiOperation(value = "upload", notes = "Upload de Arquivo")
+    @RequestMapping(value="/upload" , method=RequestMethod.POST)
+    @CrossOrigin()
+    public ResponseEntity<?> uploadFile(
+    		@RequestPart(required = true) MultipartFile uploadfile)
+    {
+        if (uploadfile.isEmpty()) {
+            return new ResponseEntity("please select a file!", HttpStatus.OK);
+        }
+        try {
+        	saveUploadedFiles(Arrays.asList(uploadfile), "/home/marcatti/tmp/upload/");
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
 
+        return new ResponseEntity("Successfully uploaded - " +
+                uploadfile.getOriginalFilename(), new HttpHeaders(), HttpStatus.OK);
+
+    }
+    
+    @ApiOperation(value = "download", notes = "Download de Arquivo")
+    @RequestMapping(value = "/download/{file_name:.+}", method = RequestMethod.GET)
+    public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String file_name)
+                                                                      throws IOException {
+        //String fullPath = stuffService.figureOutFileNameFor(stuffId);
+        File file = new File("/home/marcatti/tmp/upload/" + file_name);
+
+        HttpHeaders respHeaders = new HttpHeaders();
+        //respHeaders.setContentType("application/pdf");
+        respHeaders.setContentLength(file.toString().length());
+        respHeaders.setContentDispositionFormData("attachment", file.getName());
+
+        InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
+        return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+    } 
+
+    @ApiOperation(value = "downloaAll", notes = "Download de Arquivo")
+    @RequestMapping(value = "/downloaAll", method = RequestMethod.GET)
+    public ResponseEntity<List<InputStreamResource>> downloadAllFile() throws IOException {
+        File folder = new File("/home/marcatti/tmp/upload/");
+        File[] listOfFiles = folder.listFiles();
+        //Lis<HttpHeaders> respHeaders = new HttpHeaders();
+        List<HttpHeaders> listRespHeaders = new ArrayList<>();
+        List<InputStreamResource> isr = new ArrayList<>();
+        for (File file : listOfFiles) {
+            if (file.isFile()) {
+            	isr.add(new InputStreamResource(new FileInputStream(file)));
+            	HttpHeaders respHeaders = new HttpHeaders();
+//                //respHeaders.setContentType("application/pdf");
+                respHeaders.setContentLength(file.toString().length());
+                respHeaders.setContentDispositionFormData("attachment", file.getName());
+                listRespHeaders.add(respHeaders);
+//
+//                InputStreamResource isr = new InputStreamResource(new FileInputStream(file));
+//
+//            	
+//                results.add(file.getName());
+            }
+        }        
+        
+        
+        
+        return new ResponseEntity<List<InputStreamResource>>(isr, (MultiValueMap<String, String>) listRespHeaders, HttpStatus.OK);
+    } 
     
     
+    
+    //save file
+    private void saveUploadedFiles(List<MultipartFile> files, String fileOutpath ) throws IOException {
+    	for (MultipartFile file : files) {
+            if (file.isEmpty()) {
+                continue; //next pls
+            }
+            byte[] bytes = file.getBytes();
+            java.nio.file.Path path = Paths.get(fileOutpath + file.getOriginalFilename());
+            Files.write(path, bytes);            
+        }
+    }    
+    
+
 }
