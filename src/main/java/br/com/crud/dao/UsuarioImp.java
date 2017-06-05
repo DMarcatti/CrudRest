@@ -22,7 +22,13 @@ public class UsuarioImp  implements UsuarioDao {
 	public void salvar(Usuario usuario) {
 		// TODO Auto-generated method stub
 	     //String SQL = "insert into USUARIO (id, nome, login, senha) VALUES (?, ?, ?, ?)";
-	     jdbcTemplate.update(SqlConstante.SQL_USER_INSERT,usuario.getId(), usuario.getNome(), usuario.getLogin(), usuario.getSenha());
+	     jdbcTemplate.update(SqlConstante.SQL_USER_INSERT
+				 ,usuario.getId()
+				 , usuario.getNome()
+				 , usuario.getLogin()
+				 , usuario.getSenha()
+				 , usuario.getDtaNascimento()
+				 , usuario.getTelefone());
 	}
 
 	@Override

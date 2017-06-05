@@ -30,10 +30,10 @@ public class Usuario implements Serializable{
 	@NotEmpty
 	@Size(min=5, max=10)
 	private String senha;
-	
-    @DateTimeFormat(pattern="dd/MM/yyyy")
+
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
     @NotNull @Past
-	private Date dataAniversario;
+	private Date dtaNascimento;
     
     @Telefone
 	private String telefone;    
@@ -73,11 +73,11 @@ public class Usuario implements Serializable{
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Date getDataAniversario() {
-		return dataAniversario;
+	public Date getDtaNascimento() {
+		return dtaNascimento;
 	}
-	public void setDataAniversario(Date dataAniversario) {
-		this.dataAniversario = dataAniversario;
+	public void setDtaNascimento(Date dtaNascimento) {
+		this.dtaNascimento = dtaNascimento;
 	}
 	public String getTelefone() {
 		return telefone;

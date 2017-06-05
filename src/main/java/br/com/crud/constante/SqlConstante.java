@@ -2,7 +2,7 @@ package br.com.crud.constante;
 
 public class SqlConstante {
 
-	  public static String SQL_USER_INSERT      = "INSERT INTO USUARIO (ID, NOME, LOGIN, SENHA) VALUES (?, ?, ?, ?)";
+	  public static String SQL_USER_INSERT      = "INSERT INTO USUARIO (ID, NOME, LOGIN, SENHA, DTANASCIMENTO, TELEFONE) VALUES (?, ?, ?, ?, ?, ?)";
 	  public static String SQL_USER_UPDATE      = "UPDATE USUARIO SET NOME = ? , LOGIN = ?, SENHA= ? WHERE ID = ?";
 	  public static String SQL_USER_DELETE_ID   = "DELETE FROM USUARIO WHERE ID = ?";
 	  public static String SQL_USER_DELETE_ALL  = "DELETE FROM USUARIO";

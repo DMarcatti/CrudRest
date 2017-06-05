@@ -73,11 +73,11 @@ public class CrudController {
     						   }
     			   )
     public ResponseEntity<Usuario> save( @RequestBody Usuario usuario) {
-    	if(service.isUsuarioExist(usuario)){
-            return new ResponseEntity(new CrudErrorType("User with id " + usuario.getNome() 
+/*    	if(service.isUsuarioExist(usuario)){
+            return new ResponseEntity(new CrudErrorType("User with id " + usuario.getNome()
                     + " not found"), HttpStatus.NO_CONTENT);
-    		
-    	}
+
+    	}*/
     	service.saveUsuario(usuario);
     	return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
     }	
