@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.crud.error.CrudErrorType;
+import br.com.crud.model.Empresa;
 import br.com.crud.model.Usuario;
 import br.com.crud.service.CrudService;
 import io.swagger.annotations.Api;
@@ -40,7 +41,7 @@ import io.swagger.annotations.ApiOperation;
  * @since 30/05/17
  */
 
-
+@CrossOrigin
 @RestController
 @Api(value = "Usuario")
 public class CrudController {
@@ -111,4 +112,13 @@ public class CrudController {
         return new ResponseEntity<List<Usuario>>(usuarios, HttpStatus.OK);
     }
 
+    
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@RequestMapping(value="/findempresa" , method=RequestMethod.GET)
+    public ResponseEntity<List<Empresa>> findempresa() {
+    	List<Empresa> empresas = service.findAllEmpresas();
+        return new ResponseEntity<List<Empresa>>(empresas, HttpStatus.OK);
+    }
+    
+    
 }

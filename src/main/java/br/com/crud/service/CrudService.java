@@ -1,5 +1,6 @@
 package br.com.crud.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.crud.dao.UsuarioImp;
+import br.com.crud.model.Empresa;
 import br.com.crud.model.Usuario;
 
 @Service
@@ -22,8 +24,25 @@ public class CrudService {
 //	static{
 //    	usuarios = populateDummyUsuarios();
 //
-//    }	
+//    }	z
 	
+
+    public List<Empresa> findAllEmpresas() {
+    	
+    	List<Empresa> empresas = new ArrayList();
+    	Empresa empresa = null;
+    	for(int x =0; x <= 10; x++){
+    		empresa = new Empresa();
+    		empresa.setId(String.valueOf(x));
+    		empresa.setGrupo("grupo"+x);
+    		empresa.setCnpj("cnpj"+x);
+    		empresa.setNome("Nome" +x);
+    		empresas.add(empresa);
+    	}
+    	
+    	
+        return empresas;
+    }
 	
     public List<Usuario> findAllUsuarios() {
         return usuarioDao.findAllUsuarios();
