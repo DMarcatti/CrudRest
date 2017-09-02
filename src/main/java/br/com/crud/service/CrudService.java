@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.crud.dao.EmpresaImp;
 import br.com.crud.dao.UsuarioImp;
 import br.com.crud.model.Empresa;
 import br.com.crud.model.Usuario;
@@ -20,6 +21,9 @@ public class CrudService {
 	
 	@Autowired
 	UsuarioImp usuarioDao;
+	
+	@Autowired
+	EmpresaImp empresaDao;
 
 //	static{
 //    	usuarios = populateDummyUsuarios();
@@ -75,7 +79,13 @@ public class CrudService {
         usuario.setId(counter.incrementAndGet()+usuarioDao.findAllUsuarios().size());
         usuarioDao.salvar(usuario);
     }
- 
+
+    
+    public void saveEmpresa(Empresa empresa) {
+        empresaDao.salvar(empresa);
+    }    
+    
+    
     public void updateUsuario(Usuario Usuario) {
         int index = usuarios.indexOf(Usuario);
         usuarios.set(index, Usuario);

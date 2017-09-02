@@ -65,7 +65,19 @@ public class CrudController {
     	service.deleteUsuarioById(id);
     	return new ResponseEntity(HttpStatus.OK);
     }	
-	
+
+    @ApiOperation(value = "Gravar Empresa", notes = "Grava o Empresa" , response = Empresa.class)
+    @RequestMapping(value="/gravar" , method=RequestMethod.POST,
+    				produces = { MediaType.APPLICATION_JSON_VALUE,
+    							 MediaType.APPLICATION_JSON_VALUE 
+    						   }
+    			   )
+    public ResponseEntity<Empresa> gravar( @RequestBody Empresa empresa) {
+    	service.saveEmpresa(empresa);
+    	return new ResponseEntity<Empresa>(empresa, HttpStatus.OK);
+    }	    
+    
+    
 
     @ApiOperation(value = "save", notes = "Grava o Usuario" , response = Usuario.class)
     @RequestMapping(value="/save" , method=RequestMethod.POST,
