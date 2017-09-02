@@ -37,9 +37,6 @@ public class CrudService {
     	Empresa empresa = null;
     	for(int x =0; x <= 10; x++){
     		empresa = new Empresa();
-    		empresa.setId(String.valueOf(x));
-    		empresa.setGrupo("grupo"+x);
-    		empresa.setCnpj("cnpj"+x);
     		empresa.setNome("Nome" +x);
     		empresas.add(empresa);
     	}
