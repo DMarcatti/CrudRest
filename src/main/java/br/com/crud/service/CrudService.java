@@ -33,16 +33,7 @@ public class CrudService {
 
     public List<Empresa> findAllEmpresas() {
     	
-    	List<Empresa> empresas = new ArrayList();
-    	Empresa empresa = null;
-    	for(int x =0; x <= 10; x++){
-    		empresa = new Empresa();
-    		empresa.setNome("Nome" +x);
-    		empresas.add(empresa);
-    	}
-    	
-    	
-        return empresas;
+        return empresaDao.findAll();
     }
 	
     public List<Usuario> findAllUsuarios() {

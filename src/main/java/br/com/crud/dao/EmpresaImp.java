@@ -1,11 +1,15 @@
 package br.com.crud.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import br.com.crud.constante.SqlConstante;
 import br.com.crud.model.Empresa;
+import br.com.crud.model.Usuario;
 
 @Repository
 public class EmpresaImp implements EmpresaDao {
@@ -19,6 +23,13 @@ public class EmpresaImp implements EmpresaDao {
 	     jdbcTemplate.update(SqlConstante.SQL_EMPRESA_INSERT
 				 , empresa.getCnpj()
 				 , empresa.getNome());
+	}
+
+	@Override
+	public List<Empresa> findAll() {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.query(
+				SqlConstante.SQL_EMPRESA_FIND_ALL, new BeanPropertyRowMapper<Empresa>(Empresa.class));
 	}
 
 }
