@@ -78,7 +78,12 @@ public class CrudService {
         int index = usuarios.indexOf(Usuario);
         usuarios.set(index, Usuario);
     }
- 
+
+    
+    public void deleteEmpresaById(long id) {
+    	empresaDao.deleteEmpresaById(id);
+    }   
+    
     public void deleteUsuarioById(long id) {
     	usuarioDao.deleteUsuarioById(id);
 //        for (Iterator<Usuario> iterator = usuarios.iterator(); iterator.hasNext(); ) {

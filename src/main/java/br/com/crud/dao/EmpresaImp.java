@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.crud.constante.SqlConstante;
 import br.com.crud.model.Empresa;
-import br.com.crud.model.Usuario;
 
 @Repository
 public class EmpresaImp implements EmpresaDao {
@@ -30,6 +29,12 @@ public class EmpresaImp implements EmpresaDao {
 		// TODO Auto-generated method stub
 		return jdbcTemplate.query(
 				SqlConstante.SQL_EMPRESA_FIND_ALL, new BeanPropertyRowMapper<Empresa>(Empresa.class));
+	}
+
+	@Override
+	public void deleteEmpresaById(long id) {
+		// TODO Auto-generated method stub
+        jdbcTemplate.update(SqlConstante.SQL_EMPRESA_DELETE_ID,id);
 	}
 
 }

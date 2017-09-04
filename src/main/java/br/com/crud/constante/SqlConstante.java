@@ -12,5 +12,6 @@ public class SqlConstante {
 
 	  public static String SQL_EMPRESA_INSERT      = "INSERT INTO EMPRESA (ID, CNPJ, NOME) VALUES ( nextval('id'), ?, ?)";
 	  public static String SQL_EMPRESA_FIND_ALL    = "SELECT * FROM EMPRESA";
+	  public static String SQL_EMPRESA_DELETE_ID   = "DELETE FROM EMPRESA WHERE ID = ?";
 
 }

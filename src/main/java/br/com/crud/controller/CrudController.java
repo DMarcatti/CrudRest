@@ -66,6 +66,15 @@ public class CrudController {
     	return new ResponseEntity(HttpStatus.OK);
     }	
 
+    
+    @ApiOperation(value = "deleteEmpresaById", notes = "Remove empresa cadastrados por ID")
+    @RequestMapping(value="/deleteEmpresa/{id}" , method=RequestMethod.DELETE,
+    				produces = { MediaType.APPLICATION_JSON_VALUE} )
+    public ResponseEntity deleteEmpresaById(@PathVariable("id") long id) {
+    	service.deleteEmpresaById(id);
+    	return new ResponseEntity(HttpStatus.OK);
+    }	   
+    
     @ApiOperation(value = "Gravar Empresa", notes = "Grava o Empresa" , response = Empresa.class)
     @RequestMapping(value="/gravar" , method=RequestMethod.POST,
     				produces = { MediaType.APPLICATION_JSON_VALUE,
